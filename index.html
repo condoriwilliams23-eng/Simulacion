@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTN - Trabajo Practico N° 2 Separación de Fases</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+</head>
+
+<body>
+    <div id="simulador-container">
+
+        <header class="header-container">
+            <div class="top-nav">
+                <div class="logo"><i>UTN</i></div>
+                <div class="nav-tabs">
+                    <button class="tab active" data-target="cat-materiales">Materiales</button>
+                    <button class="tab" data-target="cat-sustancias">Sustancias</button>
+                    <button class="tab" data-target="cat-equipamiento">Equipamiento/Equipos</button>
+                </div>
+                <div class="tp-header-info"><i>Química General - FRSF</i></div>
+            </div>
+
+            <div class="toolbar">
+                <div id="cat-materiales" class="item-category active">
+                    <img src="assets/images/Vaso de precipitados 250 ml.png" alt="Vaso de precipitados"
+                        title="Vaso de precipitados (250 mL)">
+                    <img src="assets/images/Varilla de vidrio.png" alt="Varilla de vidrio"
+                        title="Varilla de vidrio con látex">
+                    <img src="assets/images/Papel de filtro.png" alt="Papel de filtro" title="Papel de filtro">
+                    <img src="assets/images/Ernlenmeyer.png" alt="Erlenmeyer" title="Erlenmeyer">
+                    <img src="assets/images/Probeta graduada.png" alt="Probeta graduada" title="Probeta graduada">
+                    <img src="assets/images/Crisol de metal.png" alt="Crisol de metal" title="Crisol de metal">
+                    <img src="assets/images/Cápsula de porcelana.png" alt="Cápsula de porcelana"
+                        title="Cápsula de porcelana">
+                    <img src="assets/images/Espatula de metal.png" alt="Espátula" title="Espátula o cuchara">
+                    <img src="assets/images/Soporte Universal.png" alt="Soporte Universal" title="Soporte Universal">
+                    <img src="assets/images/Soporte para filtro cónico.png" alt="Soporte para embudo" title="Aro para embudo">
+                    <img src="assets/images/Embudo de vidrio.png" alt="Embudo" title="Embudo de vidrio">
+                    <img src="assets/images/Trípode de hierro.png" alt="Trípode de hierro" title="Trípode de hierro">
+                    <img src="assets/images/Triángulo refractario.png" alt="Triángulo refractario" title="Triángulo refractario">
+                    <img src="assets/images/Mechero bunsen.png" alt="Mechero bunsen" title="Mechero bunsen">
+                    <img src="assets/images/Pinza de metal.png" alt="Pinza de metal" title="Pinza de metal">
+                    <span class="scroll-arrow">></span>
+                </div>
+
+                <div id="cat-sustancias" class="item-category">
+                    <img src="assets/images/Vaso con Mezcla.png" alt="Mezcla" title="Vaso con mezcla de sal y arena">
+                    <img src="assets/images/Piseta.png" alt="Piseta con agua"
+                        title="Piseta con agua destilada">
+                </div>
+
+                <div id="cat-equipamiento" class="item-category">
+                    <img src="assets/images/Balanza analítica.png" alt="Balanza analítica" title="Balanza analítica">
+                    <img src="assets/images/Desecador de Silicagel.png" alt="Desecador" title="Desecador de silicagel">
+                    <img src="assets/images/Baño Termostático.png" alt="Baño termostático" title="Baño termostático">
+                    <img src="assets/images/Estufa de secado.png" alt="Estufa de secado" title="Estufa de secado">
+                </div>
+            </div>
+        </header>
+
+        <main class="work-area">
+
+            <aside class="left-panel">
+                <div class="instrucciones-caja">
+                    <p id="texto-instruccion">1. Preparar la balanza (clickear la imagen) y encenderla (clickear en el
+                        botón On/Off).</p>
+                </div>
+            </aside>
+
+            <div id="game-canvas"></div>
+
+            <aside class="right-panel">
+
+
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <tr>
+                            <th>Masa de Mezcla Seleccionada [g]</th>
+                        </tr>
+                        <tr>
+                            <td id="masa-mezcla" class="data-cell"></td>
+                        </tr>
+                        <tr>
+                            <th>Masa del Crisol vacío [g]</th>
+                        </tr>
+                        <tr>
+                            <td id="masa-crisol" class="data-cell"></td>
+                        </tr>
+                        <tr>
+                            <th>Masa de la Cápsula vacía [g]</th>
+                        </tr>
+                        <tr>
+                            <td id="masa-capsula" class="data-cell"></td>
+                        </tr>
+                        <tr>
+                            <th>Masa del Crisol con arena [g]</th>
+                        </tr>
+                        <tr>
+                            <td id="masa-crisol-arena" class="data-cell"></td>
+                        </tr>
+                        <tr>
+                            <th>Masa de la Cápsula con sal [g]</th>
+                        </tr>
+                        <tr>
+                            <td id="masa-capsula-sal" class="data-cell"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="step-indicator">
+                    Paso de procedimiento: <span id="paso-actual">1</span>
+                </div>
+
+            </aside>
+        </main>
+    </div>
+    <!-- ── Constantes (deben ir primero) ────────────────────────── -->
+    <script src="js/constants/TEXTURES.js"></script>
+
+    <!-- ── Datos y reglas declarativas ──────────────────────────── -->
+    <script src="js/data/steps.js"></script>
+    <script src="js/data/dropRules.js"></script>
+    <script src="js/data/discardRules.js"></script>
+    <script src="js/data/fallbackRules.js"></script>
+
+    <!-- ── Handlers de pasos (cargados antes de StepManager) ────── -->
+    <script src="js/stepHandlers/steps01to10.js"></script>
+    <script src="js/stepHandlers/steps11to20.js"></script>
+    <script src="js/stepHandlers/steps21to30.js"></script>
+    <script src="js/stepHandlers/steps31to40.js"></script>
+    <script src="js/stepHandlers/steps41to50.js"></script>
+    <script src="js/stepHandlers/steps51to59.js"></script>
+
+    <!-- ── Managers ──────────────────────────────────────────────── -->
+    <script src="js/managers/StepManager.js"></script>
+    <script src="js/managers/DragManager.js"></script>
+
+    <!-- ── Objetos de laboratorio ────────────────────────────────── -->
+    <script src="js/objects/Balanza.js"></script>
+    <script src="js/objects/Vaso.js"></script>
+    <script src="js/objects/Espatula.js"></script>
+    <script src="js/objects/Probeta.js"></script>
+    <script src="js/objects/Capsula.js"></script>
+    <script src="js/objects/SoporteFiltracion.js"></script>
+    <script src="js/objects/EquipoCalentamiento.js"></script>
+    <script src="js/objects/AparatoEvaporacion.js"></script>
+
+    <!-- ── Escenas de Phaser ─────────────────────────────────────── -->
+    <script src="js/scenes/PreloadScene.js"></script>
+    <script src="js/scenes/LabScene.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

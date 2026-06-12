@@ -1,0 +1,479 @@
+/* RESETEO BÁSICO */
+* {
+    box-sizing: border-box;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #e0e0e0; 
+    overflow: hidden; 
+}
+
+#simulador-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* ----- BARRA SUPERIOR Y TOOLBAR ----- */
+.header-container {
+    background: #b4b4ff; /* Tono lila/azulado de la interfaz original */
+    border-bottom: 2px solid #333;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-nav {
+    display: flex;
+    align-items: center;
+    background: #b4b4ff;
+    height: 50px;
+    padding: 0 10px;
+}
+
+/* ----- BARRA DE HERRAMIENTAS (TOOLBAR) ----- */
+.toolbar {
+    height: 60px;
+    background: #b4b4ff;
+    border-top: 1px solid #999;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.item-category {
+    display: none; /* Oculto por defecto */
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    overflow-x: auto; /* Permite scroll si hay muchos items */
+}
+
+/* Solo se muestra la categoría activa */
+.item-category.active {
+    display: flex;
+}
+
+.item-category img {
+    height: 45px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
+}
+
+.item-category img:hover {
+    transform: scale(1.1);
+}
+
+.scroll-arrow {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    font-style: italic;
+    border: 2px solid #1c1c5e;
+    padding: 2px 10px;
+    margin: 0 10px;
+    border-radius: 12px;
+    color: #1c1c5e;
+    background-color: #fff;
+}
+
+.tp-header-info {
+    font-size: 16px;
+    color: #1c1c5e;
+    margin-left: auto;
+    margin-right: 20px;
+    font-style: italic;
+}
+
+.nav-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.tab {
+    background: transparent;
+    border: none;
+    border-right: 1px solid #1c1c5e;
+    cursor: pointer;
+    font-size: 20px;
+    color: #1c1c5e;
+    font-style: italic;
+    padding: 0 15px;
+}
+.tab:last-child {
+    border-right: none;
+}
+
+.tab.active {
+    font-weight: bold;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ----- ÁREA DE TRABAJO ----- */
+.work-area {
+    display: flex;
+    flex: 1;
+    position: relative; /* Necesario para que .botones-flotantes se posicione correctamente */
+}
+
+/* El canvas con la cuadrícula generada con CSS (no recarga Phaser) */
+#game-canvas {
+    flex: 1;
+    background-color: #ffffff;
+    background-image: 
+        linear-gradient(#d5d5d5 1px, transparent 1px), 
+        linear-gradient(90deg, #d5d5d5 1px, transparent 1px);
+    background-size: 20px 20px;
+    position: relative;
+}
+
+/* ----- PANEL LATERAL IZQUIERDO ----- */
+.left-panel {
+    width: 280px;
+    background: white;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid #999;
+}
+
+.instrucciones-caja {
+    background: white;
+    border: none;
+    padding: 10px;
+    margin: 0;
+    height: 100%;
+    font-family: monospace;
+    font-size: 13px;
+    overflow-y: auto;
+}
+
+/* ----- PANEL LATERAL DERECHO ----- */
+.right-panel {
+    width: 250px;
+    background: white;
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid #999;
+    overflow-y: auto;
+}
+
+.botones-flotantes {
+    position: absolute;
+    top: 15px;
+    right: 255px; /* justo a la izquierda del right-panel (250px) + un pequeño margen */
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+}
+
+.botones-superiores {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* Botones con formato circular exacto a la imagen */
+.btn-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid #aeb2d5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    color: #333;
+}
+
+.btn-circle:hover {
+    background: #e0e0e0;
+}
+
+.btn-icon {
+    font-size: 24px;
+    margin-bottom: 2px;
+}
+
+/* ----- TABLA DE DATOS ----- */
+.data-table-container {
+    width: 100%;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+    background: white;
+    border: none;
+    font-size: 11px;
+}
+
+.data-table th, .data-table td {
+    border: 1px solid #000;
+    padding: 4px;
+    text-align: center;
+    height: 20px;
+}
+
+.data-table th {
+    font-weight: normal;
+    background: #fff;
+}
+
+.data-table td.data-cell {
+    height: 20px;
+}
+
+.step-indicator {
+    margin-top: 20px;
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+}
+
+/* ----- PANEL DE CÁLCULOS (MODAL) ----- */
+#calculos-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.calculos-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    border: 3px solid #333;
+    width: 480px;
+    max-width: 90%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    font-family: inherit;
+}
+
+.calculos-box h2 {
+    margin-top: 0;
+    color: #1a1a2e;
+    border-bottom: 2px solid #b4b4ff;
+    padding-bottom: 10px;
+    font-size: 22px;
+}
+
+.calculos-box p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.calculos-box .input-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.calculos-box label {
+    font-size: 13px;
+    color: #333;
+}
+
+.calculos-box input {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    outline: none;
+}
+
+.calculos-box input:focus {
+    border-color: #00e5ff;
+}
+
+.calculos-box button {
+    width: 100%;
+    padding: 12px;
+    background: #b4b4ff;
+    border: 2px solid #333;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 10px;
+}
+
+.calculos-box button:hover {
+    background: #9898ff;
+}
+
+/* ----- REPRODUCTOR DE VIDEO SIMULADO (MODAL) ----- */
+#video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.video-container {
+    background: #111;
+    border: 2px solid #333;
+    border-radius: 8px;
+    width: 600px;
+    max-width: 95%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    color: #fff;
+    overflow: hidden;
+}
+
+.video-header {
+    background: #222;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-bottom: 1px solid #333;
+}
+
+.video-header h3 {
+    margin: 0;
+    font-weight: bold;
+    color: #00e5ff;
+}
+
+.video-screen {
+    height: 300px;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    position: relative;
+}
+
+.video-placeholder-icon {
+    font-size: 64px;
+    animation: videoPulse 1.5s infinite alternate;
+}
+
+@keyframes videoPulse {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    100% { transform: scale(1.1); opacity: 1; }
+}
+
+.video-status-text {
+    font-family: monospace;
+    font-size: 13px;
+    color: #a5d6a7;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.video-controls {
+    background: #222;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#btn-skip-video {
+    background: #00e5ff;
+    border: none;
+    color: #000;
+    padding: 6px 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+#btn-skip-video:hover {
+    background: #00b2cc;
+}
+
+.video-progress-bar-container {
+    flex: 1;
+    height: 8px;
+    background: #444;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+#video-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #00e5ff;
+    transition: width 0.1s linear;
+}
+
+#video-time {
+    font-family: monospace;
+    font-size: 12px;
+    color: #ccc;
+    min-width: 75px;
+    text-align: right;
+}
+
+/* Estilos para guiar al usuario en la barra de herramientas */
+.item-category img {
+    transition: opacity 0.3s, filter 0.3s, transform 0.2s;
+}
+
+.item-category img.disabled-item {
+    opacity: 0.25;
+    pointer-events: none;
+    filter: grayscale(100%) contrast(80%);
+}
+
+.item-category img.active-item {
+    opacity: 1;
+    pointer-events: auto;
+    filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.8)) drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
+    animation: pulseGlow 1.5s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.5)) drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
+    }
+    100% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 12px rgba(0, 229, 255, 1)) drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
+    }
+}
