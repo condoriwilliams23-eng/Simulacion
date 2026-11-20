@@ -36,7 +36,7 @@ body, html {
 
 /* ----- BARRA DE HERRAMIENTAS (TOOLBAR) ----- */
 .toolbar {
-    height: 60px;
+    height: 100px;
     background: #b4b4ff;
     border-top: 1px solid #999;
     padding: 0 20px;
@@ -58,7 +58,7 @@ body, html {
 }
 
 .item-category img {
-    height: 45px;
+    height: 77px;
     cursor: pointer;
     transition: transform 0.1s;
     filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.2));
@@ -162,9 +162,9 @@ body, html {
 
 /* ----- PANEL LATERAL DERECHO ----- */
 .right-panel {
-    width: 250px;
+    width: 375px;
     background: white;
-    padding: 20px 10px;
+    padding: 30px 15px;
     display: flex;
     flex-direction: column;
     border-left: 2px solid #999;
@@ -174,7 +174,7 @@ body, html {
 .botones-flotantes {
     position: absolute;
     top: 15px;
-    right: 255px; /* justo a la izquierda del right-panel (250px) + un pequeño margen */
+    right: 380px; /* justo a la izquierda del right-panel (375px) + un pequeño margen */
     display: flex;
     gap: 10px;
     z-index: 100;
@@ -222,17 +222,17 @@ body, html {
 .data-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 5px;
+    border-spacing: 0 8px;
     background: white;
     border: none;
-    font-size: 11px;
+    font-size: 17px;
 }
 
 .data-table th, .data-table td {
     border: 1px solid #000;
-    padding: 4px;
+    padding: 6px;
     text-align: center;
-    height: 20px;
+    height: 30px;
 }
 
 .data-table th {
@@ -241,12 +241,12 @@ body, html {
 }
 
 .data-table td.data-cell {
-    height: 20px;
+    height: 30px;
 }
 
 .step-indicator {
-    margin-top: 20px;
-    font-size: 16px;
+    margin-top: 30px;
+    font-size: 24px;
     text-align: center;
     width: 100%;
 }

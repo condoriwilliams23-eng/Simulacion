@@ -1,0 +1,7 @@
+# Ignorar scripts auxiliares y configuraciones locales del editor
+*.py
+__pycache__/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -9,7 +9,8 @@ class Balanza extends Phaser.GameObjects.Sprite {
 
         scene.add.existing(this);
         this.setScale(1.3);
-        this.setInteractive();
+        this.setInteractive({ cursor: 'pointer' });
+        scene.input.setDraggable(this);
 
         this.input.dropZone = true;
 
@@ -51,12 +52,14 @@ class Balanza extends Phaser.GameObjects.Sprite {
             stepManager.validarAccion('ENCENDER_BALANZA_3', { balanza: this });
         } else if (paso === 39 && this.estado === 'PESANDO') {
             stepManager.validarAccion('APAGAR_BALANZA_3', { balanza: this });
-        } else if (paso === 51 && this.estado === 'APAGADA') {
-            stepManager.validarAccion('RETIRAR_CRISOL_DESECADOR', { balanza: this });
+        } else if (paso === 51) {
+            const desecador = this.scene.children.list.find(o => o.tieneCrisol !== undefined);
+            stepManager.validarAccion('RETIRAR_CRISOL_DESECADOR', { balanza: this, desecador });
         } else if (paso === 53 && this.estado === 'PESANDO') {
             stepManager.validarAccion('APAGAR_BALANZA_4', { balanza: this });
-        } else if (paso === 55 && this.estado === 'APAGADA') {
-            stepManager.validarAccion('RETIRAR_CAPSULA_DESECADOR', { balanza: this });
+        } else if (paso === 55) {
+            const desecador = this.scene.children.list.find(o => o.tieneCapsula !== undefined);
+            stepManager.validarAccion('RETIRAR_CAPSULA_DESECADOR', { balanza: this, desecador });
         } else if (paso === 57 && this.estado === 'PESANDO') {
             stepManager.validarAccion('APAGAR_BALANZA_5', { balanza: this });
         }

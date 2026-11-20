@@ -23,10 +23,11 @@ class Capsula extends Phaser.GameObjects.Sprite {
         console.log('[Capsula] Creada en escena.');
     }
 
-    /** Recibe el filtrado del Erlenmeyer (paso 40) */
+    /** Recibe el filtrado azul de CuSO4 del Erlenmeyer (paso 40) */
     recibirFiltrado() {
-        this.setTexture(TX.VASO_CON_SUSTANCIA);
         this.tieneSolucion = true;
+        this.clearTint();
+        this.setTexture(TX.CAPSULA_SOLUCION);
         console.log('[Capsula] Solución de CuSO4 recibida.');
     }
 }

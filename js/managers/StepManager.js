@@ -106,21 +106,29 @@ class StepManager {
             }
         }
 
-        // Desarmar el Aro del soporte al comenzar el paso 24
+        // Desarmar el Aro del soporte al comenzar el paso 24 con movimiento hacia la mesa
         if (this.pasoActual === 24 && this.scene) {
             const soporte = this.scene.children.list.find(o => o instanceof SoporteFiltracion);
             if (soporte && (soporte.estadoEnsamble === 1 || soporte.texture.key === 'Soporte Universal + soporte embudo')) {
                 soporte.setTexture('Soporte Universal (icono)'); // Cambiar a la imagen del soporte vacío
                 soporte.estadoEnsamble = 0;
 
-                // Crear el Aro suelto en la mesa
+                // Crear el Aro saliendo suavemente hacia la mesa
                 const aroSuelto = this.scene.add.sprite(
-                    soporte.x + 85,
-                    soporte.y + 100,
+                    soporte.x + 10,
+                    soporte.y - 30,
                     'Soporte para embudo'
                 ).setScale(0.25).setInteractive({ cursor: 'grab' });
                 this.scene.input.setDraggable(aroSuelto);
-                console.log("[StepManager] Soporte desarmado: Aro colocado suelto en la mesa.");
+
+                this.scene.tweens.add({
+                    targets: aroSuelto,
+                    x: soporte.x + 125,
+                    y: soporte.y + 65,
+                    duration: 420,
+                    ease: 'Back.easeOut'
+                });
+                console.log("[StepManager] Soporte desarmado con movimiento: Aro colocado suelto en la mesa.");
             }
         }
 
@@ -226,6 +234,9 @@ class StepManager {
             overlay.destroy();
             zoomImg.destroy();
             closeText.destroy();
+            if (this.pasoActual === 44 || this.pasoActual === 47) {
+                this.ejecutarEfectoPaso(this.pasoActual, {});
+            }
             this.avanzarPaso();
         });
     }

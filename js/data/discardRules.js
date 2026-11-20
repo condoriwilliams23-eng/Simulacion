@@ -4,15 +4,6 @@
 //            asociadas a los sprites de descarte en el canvas.
 // ==========================================
 
-// Tipo de regla:
-// {
-//   paso:            number      — paso en que aplica
-//   texturas:        string[]    — texturas válidas del objeto arrastrado
-//   destinoEsperado: string      — 'LAVAR' o 'GUARDAR'
-//   accion:          string      — nombre de la acción para StepManager.validarAccion()
-//   datos:           (go) => object
-// }
-
 window.DISCARD_RULES = [
 
     // --- PASO 7: Guardar recipiente de mezcla y lavar espátula ---
@@ -44,7 +35,7 @@ window.DISCARD_RULES = [
     {
         paso: 21,
         texturas: [
-            TX.VASO_AGITADO, TX.VASO_SOLUCION_FINAL, TX.VASO_VACIO,
+            TX.VASO_AGITADO, TX.VASO_VACIO,
             TX.VASO_CON_SUSTANCIA, TX.VASO_CON_AGUA, TX.VASO_ARENA_HUMEDA,
             TX.VASO_ARENA_VIGILANTE
         ],
@@ -70,17 +61,17 @@ window.DISCARD_RULES = [
     // --- PASO 22: Retirar filtro con arena y lavar embudo ---
     {
         paso: 22,
-        texturas: [TX.EMBUDO],
+        texturas: [TX.EMBUDO, TX.EMBUDO_CON_FILTRO],
         destinoEsperado: 'LAVAR',
         accion: 'QUITAR_FILTRO_Y_LAVAR_EMBUDO',
         datos: (go) => ({ embudo: go })
     },
 
-    // --- PASO 24: Guardar soporte de filtración ---
+    // --- PASO 24: Guardar soporte de filtración y aro ---
     {
         paso: 24,
         texturas: [
-            TX.SOPORTE_EMBUDO, TX.SOPORTE_ARO, TX.SOPORTE_ICONO,
+            TX.SOPORTE_EMBUDO, TX.SOPORTE_ARO, TX.SOPORTE_ARO_ERLENMEYER, TX.SOPORTE_ICONO,
             TX.SOPORTE_FILTRO, TX.SOPORTE_VIGILANTE, TX.SOPORTE_SOLUCION,
             TX.SOPORTE_FILTRANDO, TX.SOPORTE_ARENA_1, TX.SOPORTE_ARENA_2,
             TX.SOPORTE_FINAL, 'Soporte Universal'
@@ -100,7 +91,7 @@ window.DISCARD_RULES = [
     // --- PASO 33: Guardar trípode completo y mechero ---
     {
         paso: 33,
-        texturas: [TX.TRIPODE_COMPLETO, TX.MECHERO],
+        texturas: [TX.TRIPODE_COMPLETO, TX.TRIPODE_TRIANGULO_MECHERO, TX.TRIPODE_TRIANGULO_CRISOL, TX.TRIPODE_TRIANGULO, TX.TRIPODE, TX.MECHERO],
         destinoEsperado: 'GUARDAR',
         accion: 'GUARDAR_ELEMENTOS_CALCINACION',
         datos: (go) => ({ calentamiento: go })
@@ -118,7 +109,7 @@ window.DISCARD_RULES = [
     // --- PASO 41: Lavar erlenmeyer ---
     {
         paso: 41,
-        texturas: [TX.ERLENMEYER, TX.ERLENMEYER_SOL2, TX.ERLENMEYER_SOL3, TX.ERLENMEYER_SOL4],
+        texturas: [TX.ERLENMEYER, TX.VASO_SOLUCION_FINAL, TX.ERLENMEYER_SOL2, TX.ERLENMEYER_SOL3, TX.ERLENMEYER_SOL4],
         destinoEsperado: 'LAVAR',
         accion: 'LAVAR_ERLENMEYER',
         datos: (go) => ({ erlenmeyer: go })
@@ -145,7 +136,7 @@ window.DISCARD_RULES = [
     // --- PASO 54: Lavar crisol ---
     {
         paso: 54,
-        texturas: [TX.CRISOL],
+        texturas: [TX.CRISOL, TX.CRISOL_FILTRO, TX.CRISOL_PINZAS],
         destinoEsperado: 'LAVAR',
         accion: 'LAVAR_CRISOL_FINAL',
         datos: (go) => ({ crisol: go })
@@ -170,7 +161,7 @@ window.DISCARD_RULES = [
     // --- PASO 59: Lavar cápsula ---
     {
         paso: 59,
-        texturas: [TX.CAPSULA],
+        texturas: [TX.CAPSULA, TX.CAPSULA_SOLUCION],
         destinoEsperado: 'LAVAR',
         accion: 'LAVAR_CAPSULA_FINAL',
         datos: (go) => ({ capsula: go })

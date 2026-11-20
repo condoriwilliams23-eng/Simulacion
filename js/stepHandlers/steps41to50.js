@@ -1,72 +1,117 @@
 // ==========================================
 // ARCHIVO: js/stepHandlers/steps41to50.js
-// Propósito: Efectos visuales y de estado para los pasos 41 al 50
+// Propósito: Efectos visuales y de movimiento para los pasos 41 al 50
 //            (Lavar erlenmeyer, baño termostático, estufa, desecador de cápsula)
 // ==========================================
 
 function handleSteps41to50(idPaso, datos, sm) {
+    const scene = sm.scene;
+
     switch (idPaso) {
 
         case 41: // Lavar erlenmeyer
-            if (datos.erlenmeyer) datos.erlenmeyer.destroy();
+            if (datos.erlenmeyer && datos.erlenmeyer.scene) datos.erlenmeyer.destroy();
             break;
 
-        case 42: // Prender baño termostático a 90 °C (Diapositiva 8)
+        case 42: // Prender baño termostático a 90 °C
             if (datos.banio) datos.banio.encender();
             break;
 
-        case 43: // Colocar cápsula en baño (con video y zoom — Diapositiva 8)
+        case 43: // Colocar cápsula en la boca del baño termostático (con colocación animada, video y zoom)
             if (datos.banio && datos.capsula) {
-                sm.mostrarVideoModal('Evaporación de Solvente en Baño Termostático', 3500, () => {
-                    if (datos.banio && datos.capsula) {
-                        datos.banio.colocarCapsula(datos.capsula);
+                scene.animarColocacionEnBoca(
+                    datos.capsula,
+                    datos.banio.x,
+                    datos.banio.y - 45,
+                    {
+                        alturaArco: 50,
+                        duracion: 440,
+                        onComplete: () => {
+                            datos.banio.colocarCapsula(datos.capsula);
+                            sm.mostrarVideoModal('Evaporación de Solvente en Baño Termostático', 2400, () => {
+                                sm.mostrarZoomImagen(TX.FOTO_BANIO_CAPSULAS);
+                            });
+                        }
                     }
-                    sm.mostrarZoomImagen(TX.BANIO_CAPSULA);
-                });
-                sm.pasoActual--;
+                );
             }
             break;
 
-        case 44: // Cerrar zoom del baño — sin efecto adicional
+        case 44: // Al cerrar el zoom del baño, devolver la cápsula evaporada a la mesa para llevarla a la estufa
+            {
+                const banio = scene.children.list.find(o => o instanceof AparatoEvaporacion && o.tipo === 'banio');
+                if (banio) {
+                    banio.retirarCapsulaAMesa(scene.scale.width * 0.34, scene.scale.height * 0.58);
+                }
+            }
             break;
 
-        case 45: // Prender estufa a 110 °C (Diapositiva 9)
+        case 45: // Prender estufa a 110 °C
             if (datos.estufa) datos.estufa.encender();
             break;
 
-        case 46: // Colocar cápsula en estufa (con video y zoom — Diapositiva 9)
+        case 46: // Colocar cápsula en la estufa (con colocación animada, video y zoom de la cápsula dentro de la estufa)
             if (datos.estufa && datos.capsula) {
-                sm.mostrarVideoModal('Drying en Estufa a 110 °C', 3000, () => {
-                    if (datos.estufa && datos.capsula) {
-                        datos.estufa.colocarCapsula(datos.capsula);
+                scene.animarColocacionEnBoca(
+                    datos.capsula,
+                    datos.estufa.x,
+                    datos.estufa.y - 20,
+                    {
+                        alturaArco: 45,
+                        duracion: 440,
+                        onComplete: () => {
+                            datos.estufa.colocarCapsula(datos.capsula);
+                            sm.mostrarVideoModal('Secado en Estufa a 110 °C', 2200, () => {
+                                sm.mostrarZoomImagen(TX.FOTO_ESTUFA_CAPSULA);
+                            });
+                        }
                     }
-                    sm.mostrarZoomImagen(TX.ESTUFA_CAPSULA);
-                });
-                sm.pasoActual--;
+                );
             }
             break;
 
-        case 47: // Cerrar zoom de la estufa — sin efecto adicional
+        case 47: // Al cerrar el zoom de la estufa, devolver la cápsula con sal seca a la mesa
+            {
+                const estufa = scene.children.list.find(o => o instanceof AparatoEvaporacion && o.tipo === 'estufa');
+                if (estufa) {
+                    estufa.retirarCapsulaAMesa(scene.scale.width * 0.36, scene.scale.height * 0.58);
+                }
+                if (scene.capsulaActiva) {
+                    scene.capsulaActiva.conSalSeca = true;
+                }
+            }
             break;
 
         case 48: // Apagar y guardar baño termostático
-            if (datos.banio) datos.banio.destroy();
+            if (datos.banio && datos.banio.scene) datos.banio.destroy();
             break;
 
         case 49: // Apagar y guardar estufa
-            if (datos.estufa) datos.estufa.destroy();
+            if (datos.estufa && datos.estufa.scene) datos.estufa.destroy();
             break;
 
-        case 50: // Trasladar cápsula al desecador
-            if (datos.desecador) {
-                datos.desecador.tieneCapsula = true;
-                if (datos.desecador.tieneCrisol) {
-                    datos.desecador.setTexture(TX.DESECADOR_AMBOS);
-                } else {
-                    datos.desecador.setTexture(TX.DESECADOR_CAPSULA);
-                }
+        case 50: // Trasladar cápsula a la boca del desecador con movimiento suave
+            if (datos.desecador && datos.capsula) {
+                scene.animarColocacionEnBoca(
+                    datos.capsula,
+                    datos.desecador.x,
+                    datos.desecador.y - 25,
+                    {
+                        alturaArco: 55,
+                        duracion: 450,
+                        onComplete: () => {
+                            datos.desecador.tieneCapsula = true;
+                            if (datos.desecador.tieneCrisol) {
+                                datos.desecador.setTexture(TX.DESECADOR_AMBOS);
+                            } else {
+                                datos.desecador.setTexture(TX.DESECADOR_CAPSULA);
+                            }
+                            if (datos.capsula && datos.capsula.scene) datos.capsula.destroy();
+                            scene.capsulaActiva = null;
+                        }
+                    }
+                );
             }
-            if (datos.capsula) datos.capsula.destroy();
             break;
     }
 }
